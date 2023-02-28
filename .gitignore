@@ -1,0 +1,12 @@
+package-lock.json
+node_modules
+.env
+yarn.lock
+.vscode/
+*.DS_Store*
+google-cloud-key.json
+.idea
+
+# Forder save image
+public/
+src/public/
