@@ -1,6 +1,5 @@
 const PostGres = require('./PostGres');
-const security = require('./security');
-const getUserByEmail = async (email) => {
+const getQuanHuyenByName = async (tenQuanHuyen) => {
   let db = await PostGres.onConnect();
   if (!db)
     return {
@@ -9,7 +8,7 @@ const getUserByEmail = async (email) => {
       message: 'Resource not found !',
     };
   else {
-    let query = `SELECT * FROM users where email = '${email}' or username='${email}'`;
+    let query = `SELECT * FROM quanhuyen where tenquanhuyen = '${tenQuanHuyen}'`;
     let result = await db.query(query);
     if (result) {
       return result.rows[0];
@@ -22,7 +21,7 @@ const getUserByEmail = async (email) => {
   }
 };
 
-const getUserById = async (id) => {
+const getQuanHuyenById = async (id) => {
   let db = await PostGres.onConnect();
   if (!db)
     return {
@@ -31,7 +30,7 @@ const getUserById = async (id) => {
       message: 'Resource not found !',
     };
   else {
-    let query = `SELECT * FROM users where id = ${id}`;
+    let query = `SELECT * FROM quanhuyen where idquanhuyen = ${id}`;
     let result = await db.query(query);
     if (result) {
       return result.rows[0];
@@ -44,7 +43,7 @@ const getUserById = async (id) => {
   }
 };
 
-const createUser = async (newUser) => {
+const createQuanHuyen = async (quanHuyen) => {
   let db = await PostGres.onConnect();
   if (!db)
     return {
@@ -53,8 +52,7 @@ const createUser = async (newUser) => {
       message: 'Resource not found !',
     };
   else {
-    const password = security.hashPassword(newUser?.password);
-    let query = `INSERT INTO users (username, password, email, role, sdt, firstname, lastname, status, address ) VALUES ('${newUser?.userName}', '${password}', '${newUser.email}', '${newUser.role}','${newUser.sdt}', '${newUser.firstName}', '${newUser.lastName}', ${newUser.status}, '${newUser.address}' )`;
+    let query = `INSERT INTO quanhuyen ( tenquanhuyen, status ) VALUES ('${quanHuyen?.tenQuanHuyen}', '${quanHuyen.status}')`;
     let result = await db.query(query);
     if (result) {
       return result;
@@ -67,9 +65,8 @@ const createUser = async (newUser) => {
   }
 };
 
-const getAllUser = async (search, pagination) => {
+const getAllQuanHuyen = async (search, pagination) => {
   const skip = pagination.page * pagination.limit - pagination.limit;
-  console.log(search);
   let db = await PostGres.onConnect();
   if (!db)
     return {
@@ -78,7 +75,7 @@ const getAllUser = async (search, pagination) => {
       message: 'Resource not found !',
     };
   else {
-    let query = `SELECT email, username, sdt, firstname, lastname, address, role FROM users WHERE CONCAT(firstname, ' ', lastname) ILIKE '%${search}%'  LIMIT ${pagination.limit} OFFSET ${skip} `;
+    let query = `SELECT * FROM quanhuyen WHERE tenquanhuyen ILIKE '%${search}%'  LIMIT ${pagination.limit} OFFSET ${skip} `;
     let result = await db.query(query);
     if (result) {
       return result.rows;
@@ -91,7 +88,7 @@ const getAllUser = async (search, pagination) => {
   }
 };
 
-const updateUser = async (id, update) => {
+const updateQuanHuyen = async (id, update) => {
   let db = await PostGres.onConnect();
   if (!db)
     return {
@@ -100,8 +97,7 @@ const updateUser = async (id, update) => {
       message: 'Resource not found !',
     };
   else {
-    // const password = security.hashPassword(update?.password);
-    let query = `UPDATE users SET sdt='${update?.sdt}', firstname='${update?.firstName}', lastname='${update?.lastName}', status='${update.status}', address='${update.address}' WHERE id = ${id}`;
+    let query = `UPDATE quanhuyen SET tenquanhuyen='${update?.tenQuanHuyen}', status='${update?.status}' WHERE idquanhuyen = ${id}`;
     let result = await db.query(query);
     if (result) {
       return result;
@@ -114,7 +110,7 @@ const updateUser = async (id, update) => {
   }
 };
 
-const deleteUser = async (id) => {
+const deleteQuanHuyen = async (id) => {
   let db = await PostGres.onConnect();
   if (!db)
     return {
@@ -123,7 +119,7 @@ const deleteUser = async (id) => {
       message: 'Resource not found !',
     };
   else {
-    let query = `DELETE FROM users WHERE id = ${id}`;
+    let query = `DELETE FROM quanhuyen WHERE idquanhuyen = ${id}`;
     let result = await db.query(query);
     if (result) {
       return result;
@@ -137,10 +133,10 @@ const deleteUser = async (id) => {
 };
 
 module.exports = {
-  getUserByEmail,
-  getUserById,
-  createUser,
-  getAllUser,
-  updateUser,
-  deleteUser,
+  getQuanHuyenByName,
+  getQuanHuyenById,
+  createQuanHuyen,
+  getAllQuanHuyen,
+  updateQuanHuyen,
+  deleteQuanHuyen,
 };

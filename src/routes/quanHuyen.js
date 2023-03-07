@@ -1,38 +1,39 @@
 const express = require('express');
-const userRoute = express.Router();
+const quanHuyenRoute = express.Router();
 
-const userController = require('../controllers/user');
+const quanHuyenController = require('../controllers/quanHuyen');
 const { UserRole } = require('../constants/enum');
 
 const { requireLogin, checkPermissions } = require('../middleware/permission');
-userRoute.post(
+
+quanHuyenRoute.post(
   '/',
   requireLogin,
   checkPermissions(UserRole.ADMIN, UserRole.UBTVSBN, UserRole.VHTTDL),
-  userController.createUser
+  quanHuyenController.createQuanHuyen
 );
 
-userRoute.get(
+quanHuyenRoute.get(
   '/',
   requireLogin,
   checkPermissions(UserRole.ADMIN, UserRole.UBTVSBN, UserRole.VHTTDL),
-  userController.getAllUser
+  quanHuyenController.getAllQuanHuyen
 );
 
-userRoute.get('/:id', requireLogin, userController.getUserById);
+quanHuyenRoute.get('/:id', requireLogin, quanHuyenController.getQuanHuyenById);
 
-userRoute.put(
+quanHuyenRoute.put(
   '/:id',
   requireLogin,
   checkPermissions(UserRole.ADMIN, UserRole.UBTVSBN, UserRole.VHTTDL),
-  userController.updateUser
+  quanHuyenController.updateQuanHuyen
 );
 
-userRoute.delete(
+quanHuyenRoute.delete(
   '/:id',
   requireLogin,
   checkPermissions(UserRole.ADMIN, UserRole.UBTVSBN, UserRole.VHTTDL),
-  userController.deleteUser
+  quanHuyenController.deleteQuanHuyen
 );
 
-module.exports = userRoute;
+module.exports = quanHuyenRoute;

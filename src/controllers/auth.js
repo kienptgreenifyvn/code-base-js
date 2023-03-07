@@ -42,6 +42,7 @@ const login = async (req, res) => {
     // Init user
     let user = {
       id: existedUser.id,
+      email: existedUser?.email,
       role: existedUser.role,
     };
     const tokenAuth = authService.generateToken(user);
@@ -51,13 +52,41 @@ const login = async (req, res) => {
     switch (existedUser.role) {
       case UserRole.ADMIN:
         const dataAdmin = await userService.getUserById(user.id);
+        console.log(dataAdmin);
         if (!dataAdmin) {
           logger.debug(`[login]: dataAdmin -> ${httpResponses.USER_NOT_FOUND}`);
           return res.badRequest(httpResponses.USER_NOT_FOUND);
         }
         logger.debug(`[login]: dataAdmin -> ${httpResponses.SUCCESS}`);
 
-        data = { name: dataAdmin?.name };
+        data = {
+          userName: dataAdmin?.username,
+          firstName: dataAdmin?.firstname,
+          lastName: dataAdmin?.lastname,
+        };
+        user = {
+          ...user,
+          data: data,
+        };
+        logger.info(`[login] dataAdmin -> ${httpResponses.SUCCESS}`);
+        break;
+
+      case UserRole.UBTVSBN:
+      case UserRole.VHTTDL:
+        const dataUBTVSBN = await userService.getUserById(user.id);
+        if (!dataUBTVSBN) {
+          logger.debug(`[login]: dataUBTVSBN -> ${httpResponses.USER_NOT_FOUND}`);
+          return res.badRequest(httpResponses.USER_NOT_FOUND);
+        }
+        logger.debug(`[login]: dataUBTVSBN -> ${httpResponses.SUCCESS}`);
+
+        data = {
+          userName: dataUBTVSBN?.username,
+          firstName: dataUBTVSBN?.firstname,
+          lastName: dataUBTVSBN?.lastname,
+          sdt: dataUBTVSBN?.sdt,
+          address: dataUBTVSBN?.address,
+        };
         user = {
           ...user,
           data: data,
@@ -73,7 +102,13 @@ const login = async (req, res) => {
         }
         logger.debug(`[login]: dataUser -> ${httpResponses.SUCCESS}`);
 
-        data = { name: dataUser?.name };
+        data = {
+          userName: dataUser?.username,
+          firstName: dataUser?.firstname,
+          lastName: dataUser?.lastname,
+          sdt: dataUser?.sdt,
+          address: dataUser?.address,
+        };
         user = {
           ...user,
           data: data,
@@ -86,7 +121,6 @@ const login = async (req, res) => {
     }
 
     logger.debug(`[login]: responses -> ${httpResponses.SUCCESS}`);
-
     return res.status(httpResponses.HTTP_STATUS_OK).json({
       success: true,
       message: `${httpResponses.SUCCESS}`,

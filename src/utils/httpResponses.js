@@ -34,6 +34,7 @@ module.exports.EMAIL_REQUIRED = 'Email is required';
 module.exports.PASSWORD_REQUIRED = 'Password is required';
 module.exports.PASSWORD_NOT_FOUND = 'Password not found';
 module.exports.EMAIL_EXISTED = 'Email is existed';
+module.exports.USER_NAME_EXISTED = 'User name is existed';
 module.exports.REGISTER_SUCCESS = 'Register success';
 module.exports.REGISTER_FAIL = 'Register fail';
 module.exports.LOGIN_SUCCESS = 'Login success';
@@ -80,3 +81,7 @@ module.exports.DELETE_AVATAR_SUCCESSFULLY = 'Delete avatar successfully.';
 module.exports.COULD_NOT_UPLOAD_FILE = 'Could not upload the file: ';
 module.exports.FILE_IS_REQUIRED = 'File is required';
 module.exports.FILES_IS_REQUIRED = 'Files is required';
+
+//Quan huyện
+module.exports.QUAN_HUYEN_DA_TON_TAI = 'Quận huyện đã tồn tại';
+module.exports.KHONG_TIM_THAY_QUAN_HUYEN = 'Không tìm thấy quận huyện';
