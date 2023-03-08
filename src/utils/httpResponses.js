@@ -85,3 +85,7 @@ module.exports.FILES_IS_REQUIRED = 'Files is required';
 //Quan huyện
 module.exports.QUAN_HUYEN_DA_TON_TAI = 'Quận huyện đã tồn tại';
 module.exports.KHONG_TIM_THAY_QUAN_HUYEN = 'Không tìm thấy quận huyện';
+
+//Danh Mục
+module.exports.DANH_MUC_DA_TON_TAI = 'Danh mục đã tồn tại';
+module.exports.KHONG_TIM_THAY_DANH_MUC = 'Không tìm thấy danh mục';
