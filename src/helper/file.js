@@ -21,8 +21,18 @@ const getImgUrls = (files) => {
   return imgUrls;
 };
 
+const getImgUrlsName = (files) => {
+  const imgUrls = files.map((file) => {
+    return `${file.filename}`;
+  });
+  return imgUrls;
+};
 const getImgUrl = (file) => {
   return `${fileBaseUrl}/${file.filename}`;
+};
+
+const getImgUrlName = (file) => {
+  return `${file.filename}`;
 };
 
 const fileFilter = (req, file, cb) => {
@@ -37,11 +47,13 @@ const fileFilter = (req, file, cb) => {
 const multer = Multer({
   storage: storage,
   limits: { fileSize: FILE_MAX_SIZE },
-  // fileFilter: fileFilter,
+  fileFilter: fileFilter,
 });
 
 module.exports = {
   multer,
   getImgUrls,
   getImgUrl,
+  getImgUrlsName,
+  getImgUrlName,
 };

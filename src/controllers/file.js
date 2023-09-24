@@ -5,6 +5,7 @@ const { FILE_ERR_CODE } = require('../constants/constants');
 const httpResponses = require('../utils/httpResponses');
 
 const fileHelpers = require('../helper/file');
+const fileService = require('../services/file');
 const logger = require('../utils/logger');
 
 /**
@@ -16,18 +17,22 @@ const logger = require('../utils/logger');
 const uploadSingleFile = async (req, res) => {
   try {
     const file = req.file;
-    logger.debug(`[uploadSingleFile]`);
+    const hinhAnh = req.body;
+    hinhAnh.uri = fileHelpers.getImgUrlName(file);
+    logger.debug(`[uploadSingleFile] hinhAnh -> ${JSON.stringify(req.body)}`);
 
     if (!file) {
       logger.debug(`[uploadSingleFile] file -> ${httpResponses.FILE_IS_REQUIRED}`);
       res.badRequest(httpResponses.FILE_IS_REQUIRED);
     }
 
+    await fileService.createHinhAnh(hinhAnh);
+
     return res.status(httpResponses.HTTP_STATUS_OK).json({
       success: true,
       message: httpResponses.UPLOAD_FILE_SUCCESSFULLY,
       data: {
-        link: fileHelpers.getImgUrl(file),
+        link: fileHelpers.getImgUrlName(file),
       },
     });
   } catch (err) {
@@ -54,18 +59,23 @@ const uploadSingleFile = async (req, res) => {
 const uploadMultiFiles = async (req, res) => {
   try {
     const files = req.files;
+    const hinhAnh = req.body;
     logger.debug(`[uploadMultiFiles]`);
 
     if (!files) {
       logger.debug(`[uploadSingleFile] file -> ${httpResponses.FILES_IS_REQUIRED}`);
       res.badRequest(httpResponses.FILES_IS_REQUIRED);
     }
+    for (const item of files) {
+      hinhAnh.uri = item?.filename;
+      await fileService.createHinhAnh(hinhAnh);
+    }
 
     return res.status(httpResponses.HTTP_STATUS_OK).json({
       success: true,
       message: httpResponses.UPLOAD_FILE_SUCCESSFULLY,
       data: {
-        links: fileHelpers.getImgUrls(files),
+        links: fileHelpers.getImgUrlsName(files),
       },
     });
   } catch (err) {

@@ -9,7 +9,7 @@ const getUserByEmail = async (email) => {
       message: 'Resource not found !',
     };
   else {
-    let query = `SELECT * FROM users where email = '${email}' or username='${email}'`;
+    let query = `SELECT * FROM users where email = '${email}' or "userName"='${email}'`;
     let result = await db.query(query);
     if (result) {
       return result.rows[0];
@@ -54,7 +54,7 @@ const createUser = async (newUser) => {
     };
   else {
     const password = security.hashPassword(newUser?.password);
-    let query = `INSERT INTO users (username, password, email, role, sdt, firstname, lastname, status, address ) VALUES ('${newUser?.userName}', '${password}', '${newUser.email}', '${newUser.role}','${newUser.sdt}', '${newUser.firstName}', '${newUser.lastName}', ${newUser.status}, '${newUser.address}' )`;
+    let query = `INSERT INTO users ("userName", password, email, role, sdt, "firstName", "lastName", status, "address" ) VALUES ('${newUser?.userName}', '${password}', '${newUser.email}', '${newUser.role}','${newUser.sdt}', '${newUser.firstName}', '${newUser.lastName}', ${newUser.status}, '${newUser.address}' )`;
     let result = await db.query(query);
     if (result) {
       return result;
@@ -78,7 +78,7 @@ const getAllUser = async (search, pagination) => {
       message: 'Resource not found !',
     };
   else {
-    let query = `SELECT email, username, sdt, firstname, lastname, address, role FROM users WHERE CONCAT(firstname, ' ', lastname) ILIKE '%${search}%'  LIMIT ${pagination.limit} OFFSET ${skip} `;
+    let query = `SELECT email, "userName", sdt, "firstName", "lastName", address, role FROM users WHERE CONCAT("firstName", ' ', "lastName") ILIKE '%${search}%'  LIMIT ${pagination.limit} OFFSET ${skip} `;
     let result = await db.query(query);
     if (result) {
       return result.rows;
@@ -101,7 +101,7 @@ const updateUser = async (id, update) => {
     };
   else {
     // const password = security.hashPassword(update?.password);
-    let query = `UPDATE users SET sdt='${update?.sdt}', firstname='${update?.firstName}', lastname='${update?.lastName}', status='${update.status}', address='${update.address}' WHERE id = ${id}`;
+    let query = `UPDATE users SET sdt='${update?.sdt}', "firstName"='${update?.firstName}', "lastName"='${update?.lastName}', status='${update.status}', address='${update.address}' WHERE id = ${id}`;
     let result = await db.query(query);
     if (result) {
       return result;
